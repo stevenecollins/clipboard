@@ -87,9 +87,11 @@ clipboards/
 
 Private - All Rights Reserved
 
-## 🔗 Links
+## 📚 Documentation
 
-- [Project Documentation](./docs)
-- [API Documentation](./backend/README.md)
-- [Mobile App](./frontend/mobile/README.md)
-- [Web Dashboard](./frontend/web/README.md)
+## For detailed project documentation, see:
+- **Documentation Index** (./docs/README.md) - Complete documentation directory
+- **Vision & Mission** (./docs/requirements/vision-mission.md)
+- **Technical Requirements** (./docs/technical/technical-requirements.md)  
+- **Development Roadmap** (./docs/technical/development-roadmap.md)
+- **API Documentation** (./docs/api/README.md)
