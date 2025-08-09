@@ -3,6 +3,15 @@
 ## Project Overview
 Clipboards is a cross-platform bookmarking application that allows users to save images and URLs from any website or app into private, organized boards.
 
+## Project Documentation
+- **Vision & Mission**: `docs/requirements/vision-mission.md`
+- **MVP Brief**: `docs/requirements/mvp-brief.md`
+- **Feature List**: `docs/requirements/feature-list.md`
+- **Technical Requirements**: `docs/technical/technical-requirements.md`
+- **Development Roadmap**: `docs/technical/development-roadmap.md`
+- **UX Flows**: `docs/design/ux-flows.md`
+- **Privacy & Legal**: `docs/legal/privacy-legal.md`
+
 ## Core Problem We're Solving
 - Pinterest locks saves to their ecosystem
 - Screenshots lose source links

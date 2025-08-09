@@ -12,13 +12,16 @@ datasource db {
 
 model User {
   id               String    @id @default(cuid())
+  firebaseUid      String?   @unique // Firebase Auth UID
   email            String    @unique
   passwordHash     String?   // nullable for social auth
   name             String
   avatarUrl        String?
-  authProvider     String    @default("email") // email, google, apple
-  authProviderId   String?
+  authProvider     String    @default("email") // email, google, apple, firebase
+  authProviderId   String?   // Provider-specific ID
   emailVerified    Boolean   @default(false)
+  disabled         Boolean   @default(false) // For account suspension
+  lastSignIn       DateTime?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 

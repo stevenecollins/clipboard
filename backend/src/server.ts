@@ -11,6 +11,8 @@ import { notFoundHandler } from '@/middleware/notFoundHandler';
 import { requestLogger } from '@/middleware/requestLogger';
 import { healthRouter } from '@/api/health';
 import { authRouter } from '@/api/auth';
+import { firebaseAuthRouter } from '@/api/firebase-auth';
+import { socialAuthRouter } from '@/api/social-auth';
 import { boardsRouter } from '@/api/boards';
 import { itemsRouter } from '@/api/items';
 
@@ -74,6 +76,8 @@ app.use(requestLogger);
 // API routes
 app.use('/api/health', healthRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/auth', firebaseAuthRouter);
+app.use('/api/auth', socialAuthRouter);
 app.use('/api/boards', boardsRouter);
 app.use('/api/items', itemsRouter);
 

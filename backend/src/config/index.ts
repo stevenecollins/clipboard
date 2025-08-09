@@ -11,6 +11,12 @@ interface Config {
     expiresIn: string;
     refreshExpiresIn: string;
   };
+  firebase: {
+    projectId: string;
+    privateKey: string;
+    clientEmail: string;
+    webApiKey: string;
+  };
   aws: {
     accessKeyId: string;
     secretAccessKey: string;
@@ -66,6 +72,13 @@ export const config: Config = {
     secret: process.env.JWT_SECRET!,
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
+  },
+  
+  firebase: {
+    projectId: process.env.FIREBASE_PROJECT_ID || '',
+    privateKey: process.env.FIREBASE_PRIVATE_KEY || '',
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL || '',
+    webApiKey: process.env.FIREBASE_WEB_API_KEY || '',
   },
   
   aws: {
