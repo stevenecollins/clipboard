@@ -14,8 +14,8 @@ model User {
   id               String    @id @default(cuid())
   firebaseUid      String?   @unique // Firebase Auth UID
   email            String    @unique
-  passwordHash     String?   // nullable for social auth
   name             String
+  passwordHash     String?   // nullable for social auth
   avatarUrl        String?
   authProvider     String    @default("email") // email, google, apple, firebase
   authProviderId   String?   // Provider-specific ID
@@ -29,6 +29,10 @@ model User {
   boards           Board[]
   sessions         UserSession[]
 
+  // Indexes
+  @@index([email])
+  @@index([firebaseUid])
+  @@index([createdAt])
   @@map("users")
 }
 
@@ -37,8 +41,9 @@ model Board {
   userId      String
   name        String
   description String?
-  color       String?  // hex color code
-  position    Int      @default(0) // for ordering
+  isPrivate   Boolean  @default(true)  // Privacy setting for the board
+  color       String?  // hex color code for UI
+  position    Int      @default(0)     // for ordering boards
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -46,26 +51,37 @@ model Board {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   items       Item[]
 
+  // Indexes
+  @@index([userId])
+  @@index([createdAt])
+  @@index([userId, position])
+  @@index([isPrivate])
   @@map("boards")
 }
 
 model Item {
   id           String   @id @default(cuid())
   boardId      String
-  title        String?
-  sourceUrl    String
-  imageUrl     String   // S3 URL
-  imageWidth   Int?
+  title        String?  // Optional title for the item
+  description  String?  // Optional description for the item
+  imageUrl     String   // URL to the saved image (S3, CDN, etc.)
+  sourceUrl    String   // Original source URL where the item was found
+  imageWidth   Int?     // Image dimensions for proper display
   imageHeight  Int?
-  imageSize    Int?     // bytes
-  imageFormat  String?  // jpg, png, webp
-  position     Int      @default(0) // for ordering within board
+  imageSize    Int?     // File size in bytes
+  imageFormat  String?  // Image format (jpg, png, webp, etc.)
+  position     Int      @default(0) // for ordering items within a board
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   // Relations
   board        Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
 
+  // Indexes
+  @@index([boardId])
+  @@index([createdAt])
+  @@index([boardId, position])
+  @@index([sourceUrl])
   @@map("items")
 }
 
@@ -73,12 +89,15 @@ model UserSession {
   id         String   @id @default(cuid())
   userId     String
   deviceType String?  // mobile, web, extension
-  deviceId   String?
+  deviceId   String?  // unique device identifier
   lastSync   DateTime @default(now())
   createdAt  DateTime @default(now())
 
   // Relations
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Indexes
+  @@index([userId])
+  @@index([lastSync])
   @@map("user_sessions")
 }
