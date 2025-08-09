@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  passwordHash     String?   // nullable for social auth
+  name             String
+  avatarUrl        String?
+  authProvider     String    @default("email") // email, google, apple
+  authProviderId   String?
+  emailVerified    Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Relations
+  boards           Board[]
+  sessions         UserSession[]
+
+  @@map("users")
+}
+
+model Board {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  color       String?  // hex color code
+  position    Int      @default(0) // for ordering
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       Item[]
+
+  @@map("boards")
+}
+
+model Item {
+  id           String   @id @default(cuid())
+  boardId      String
+  title        String?
+  sourceUrl    String
+  imageUrl     String   // S3 URL
+  imageWidth   Int?
+  imageHeight  Int?
+  imageSize    Int?     // bytes
+  imageFormat  String?  // jpg, png, webp
+  position     Int      @default(0) // for ordering within board
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  board        Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  @@map("items")
+}
+
+model UserSession {
+  id         String   @id @default(cuid())
+  userId     String
+  deviceType String?  // mobile, web, extension
+  deviceId   String?
+  lastSync   DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  // Relations
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_sessions")
+}
